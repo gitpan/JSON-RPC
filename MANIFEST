@@ -1,0 +1,13 @@
+Changes
+lib/JSON/RPC.pm
+lib/JSON/RPC/Client.pm
+lib/JSON/RPC/Server.pm
+lib/JSON/RPC/Procedure.pm
+lib/JSON/RPC/Server/Apache.pm
+lib/JSON/RPC/Server/CGI.pm
+lib/JSON/RPC/Server/Daemon.pm
+Makefile.PL
+MANIFEST
+README
+t/01-use.t
+META.yml                                 Module meta-data (added by MakeMaker)
