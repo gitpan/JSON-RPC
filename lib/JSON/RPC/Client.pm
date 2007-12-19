@@ -11,7 +11,7 @@ use Carp ();
 
 package JSON::RPC::Client;
 
-$JSON::RPC::Client::VERSION = '0.90';
+$JSON::RPC::Client::VERSION = '0.91';
 
 use LWP::UserAgent;
 
@@ -51,6 +51,11 @@ sub AUTOLOAD {
 }
 
 
+sub create_json_coder {
+    JSON->new->allow_nonref->utf8;
+}
+
+
 sub new {
     my $proto = shift;
     my $self  = bless {}, (ref $proto ? ref $proto : $proto);
@@ -61,7 +66,7 @@ sub new {
     );
 
     $self->ua($ua);
-    $self->json( JSON::PP->new->allow_nonref->utf8 );
+    $self->json( $proto->create_json_coder );
     $self->version('1.1');
     $self->content_type('application/json');
 
@@ -168,7 +173,7 @@ BEGIN {
 
 sub new {
     my ($class, $obj) = @_;
-    my $content = JSON::PP->new->decode($obj->content);
+    my $content = JSON->new->decode($obj->content);
 
     my $self = bless {
         jsontext  => $obj->content,

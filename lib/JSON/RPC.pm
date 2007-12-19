@@ -1,6 +1,6 @@
 package JSON::RPC;
 
-$JSON::RPC::VERSION = '0.90';
+$JSON::RPC::VERSION = '0.91';
 
 
 1;
