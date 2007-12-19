@@ -7,9 +7,8 @@ use lib qw(/var/www/cgi-bin/json/);
 use base qw(JSON::RPC::Server);
 
 use vars qw($VERSION);
-use Data::Dumper;
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 
 use Apache2::Const qw(OK HTTP_BAD_REQUEST SERVER_ERROR);
@@ -28,7 +27,6 @@ sub handler {
 
     my $s = __PACKAGE__->new;
 
-#    $s->{request} = $r;
     $s->request($r);
 
     $s->{path_info} = $r->path_info;

@@ -4,14 +4,14 @@
 ##############################################################################
 
 use strict;
-use JSON::PP ();
+use JSON ();
 use Carp ();
 
 ##############################################################################
 
 package JSON::RPC::Client;
 
-$JSON::RPC::Client::VERSION = '0.01';
+$JSON::RPC::Client::VERSION = '0.90';
 
 use LWP::UserAgent;
 
@@ -227,7 +227,7 @@ __END__
 
 =head1 NAME
 
-JSON::RPC::Server - Perl implementation of JSON-RPC sever
+JSON::RPC::Client - Perl implementation of JSON-RPC client
 
 =head1 SYNOPSIS
 

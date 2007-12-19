@@ -4,6 +4,8 @@ package JSON::RPC::Procedure;
 # http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html
 #
 
+$JSON::RPC::Procedure::VERSION = '0.90';
+
 use strict;
 use attributes;
 use Carp ();

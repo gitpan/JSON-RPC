@@ -5,9 +5,13 @@ lib/JSON/RPC/Server.pm
 lib/JSON/RPC/Procedure.pm
 lib/JSON/RPC/Server/Apache.pm
 lib/JSON/RPC/Server/CGI.pm
+lib/JSON/RPC/Server/FastCGI.pm
 lib/JSON/RPC/Server/Daemon.pm
+lib/JSONRPC.pm
 Makefile.PL
 MANIFEST
 README
-t/01-use.t
+t/00_pod.t
+t/01_use.t
+t/02_server.t
 META.yml                                 Module meta-data (added by MakeMaker)

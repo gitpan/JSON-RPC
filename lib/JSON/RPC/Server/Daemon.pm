@@ -2,9 +2,10 @@
 package JSON::RPC::Server::Daemon;
 
 use strict;
+use JSON::RPC::Server; # for old Perl 5.005
 use base qw(JSON::RPC::Server);
 
-$JSON::RPC::Server::Daemon::VERSION = '0.01';
+$JSON::RPC::Server::Daemon::VERSION = '0.02';
 
 use Data::Dumper;
 

@@ -1,7 +1,7 @@
-JSON::RPC version 1.00
+JSON::RPC version 0.90
 =================
 NAME
-    JSONRPC - Perl implementation of JSON-RPC 1.1 protocol
+    JSON::RPC - Perl implementation of JSON-RPC 1.1 protocol
 
 DESCRIPTION
      JSON-RPC is a stateless and light-weight remote procedure call (RPC)
@@ -14,9 +14,9 @@ DESCRIPTION
     This module was in JSON package on CPAN before. Now its interfaces was
     completely changed.
 
-    Old modules - JSONRPC::Transport::HTTP and Apache::JSONRPC are
-    obsoleted. Please try JSON::RPC::Server and JSON::RPC::Client which
-    support JSON-RPC protocol version 1.1.
+    The old modules - JSONRPC::Transport::HTTP and Apache::JSONRPC are
+    deprecated. Please try to use JSON::RPC::Server and JSON::RPC::Client
+    which support both JSON-RPC protocol version 1.1 and 1.0.
 
 EXAMPLES
     CGI version.
@@ -25,7 +25,7 @@ EXAMPLES
      # In your application class
      package MyApp;
  
-     use base qw(JSONRPC::Procedure); # Perl 5.6 or more than
+     use base qw(JSON::RPC::Procedure); # Perl 5.6 or more than
  
      sub echo : Public {    # new version style. called by clients
          # first argument is JSON::RPC::Server object.
@@ -49,23 +49,23 @@ EXAMPLES
  
      #--------------------------
      # In your triger script.
-     use JSONRPC::Server::CGI;
+     use JSON::RPC::Server::CGI;
      use MyApp;
  
      # simple
-      JSONRPC::Server::CGI->dispatch('MyApp')->handle();
+      JSON::RPC::Server::CGI->dispatch('MyApp')->handle();
  
      # or 
-     JSONRPC::Server::CGI->dispatch([qw/MyApp FooBar/])->handle();
+     JSON::RPC::Server::CGI->dispatch([qw/MyApp FooBar/])->handle();
  
      # or INFO_PATH version
-     JSONRPC::Server::CGI->dispatch({'/Test' => 'MyApp'})->handle();
+     JSON::RPC::Server::CGI->dispatch({'/Test' => 'MyApp'})->handle();
  
      #--------------------------
      # Client
-     use JSONRPC::Client;
+     use JSON::RPC::Client;
  
-     my $client = new JSONRPC::Client;
+     my $client = new JSON::RPC::Client;
 
      my $uri = 'http://www.example.com/jsonrpc/Test';
      my $obj = {
@@ -97,6 +97,10 @@ EXAMPLES
 
 ABOUT NEW VERSION
     supports JSON-RPC protocol v1.1
+TODO
+    Document
+    Examples
+    More Tests
 AUTHOR
     Makamaka Hannyaharamitu, <makamaka[at]cpan.org>
 
@@ -105,4 +109,3 @@ COPYRIGHT AND LICENSE
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
-

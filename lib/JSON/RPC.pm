@@ -1,6 +1,6 @@
 package JSON::RPC;
 
-$JSON::RPC::VERSION = '0.01';
+$JSON::RPC::VERSION = '0.90';
 
 
 1;
@@ -25,9 +25,9 @@ quoted from L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html>.
 This module was in JSON package on CPAN before.
 Now its interfaces was completely changed.
 
-Old modules - L<JSONRPC::Transport::HTTP> and L<Apache::JSONRPC> are obsoleted.
-Please try JSON::RPC::Server and JSON::RPC::Client which support JSON-RPC
-protocol version 1.1.
+The old modules - L<JSONRPC::Transport::HTTP> and L<Apache::JSONRPC> are deprecated.
+Please try to use JSON::RPC::Server and JSON::RPC::Client which support both JSON-RPC
+protocol version 1.1 and 1.0.
 
 
 =head1 EXAMPLES

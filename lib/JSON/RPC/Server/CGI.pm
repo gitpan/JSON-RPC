@@ -2,12 +2,15 @@
 package JSON::RPC::Server::CGI;
 
 use strict;
-use CGI;
-use Data::Dumper;
+#use Data::Dumper;
 
+
+use CGI;
+use JSON::RPC::Server; # for old Perl 5.005
 use base qw(JSON::RPC::Server);
 
-$JSON::RPC::Server::CGI::VERSION = '0.01';
+$JSON::RPC::Server::CGI::VERSION = '0.90';
+
 
 sub new {
     my $class = shift;
@@ -23,14 +26,6 @@ sub new {
 
 sub retrieve_json_from_post {
     my $json = $_[0]->cgi->param('POSTDATA');
-=pod
-    $_[0]->raise_error(
-        status_code => 200,
-        version     => '1.1',
-        code        => 100,
-        message     => "No JSON data.",
-    );
-=cut
     return $json;
 }
 

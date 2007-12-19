@@ -4,7 +4,7 @@
 ##############################################################################
 
 use strict;
-use JSON::PP ();
+use JSON ();
 use Carp ();
 
 use HTTP::Request ();
@@ -24,13 +24,10 @@ BEGIN {
     }
 }
 
-use Data::Dumper;
 
-$JSON::RPC::Server::VERSION = '0.01';
+$JSON::RPC::Server::VERSION = '0.90';
 
 BEGIN {
-    require JSON::RPC::Procedure;
-
     for my $method (qw/request path_info json version error_message max_length charset content_type
                         error_response_header return_die_message/)
     {
@@ -44,6 +41,11 @@ BEGIN {
 }
 
 
+sub create_json_coder {
+    JSON->new->utf8; # assumes UTF8
+}
+
+
 sub new {
     my $class = shift;
 
@@ -51,7 +53,7 @@ sub new {
         max_length    => 1024 * 100,
         charset       => 'UTF-8',
         content_type  => 'application/json',
-        json          => JSON::PP->new->utf8, # assumes UTF8
+        json          => $class->create_json_coder,
         loaded_module => { name  => {}, order => [], },
         @_,
     }, $class;
@@ -436,8 +438,6 @@ sub describe {
 }
 
 
-
-
 1;
 __END__
 
@@ -477,20 +477,30 @@ JSON::RPC::Server - Perl implementation of JSON-RPC sever
  # Daemon version
  use JSON::RPC::Server::Daemon;
  
- my JSON::RPC::Server::Daemon->new(LocalPort => 8080);
-                             ->dispatch({'/jsonrpc/API' => 'MyApp'})
-                             ->handle();
+ JSON::RPC::Server::Daemon->new(LocalPort => 8080);
+                          ->dispatch({'/jsonrpc/API' => 'MyApp'})
+                          ->handle();
+ 
+ 
+ 
+ # FastCGI version
+ use JSON::RPC::Server::FastCGI;
+ 
+ my $server = JSON::RPC::Server::FastCGI->new;
+ 
+    $server->dispatch_to('MyApp')->handle();
+
 
 
 =head1 DESCRIPTION
 
 Gets a client request.
 
-Parses JSON data.
+Parses its JSON data.
 
-Passes itself (server object) and object(s) decoded from JSON data to your procedure (method).
+Passes the server object and the object decoded from the JSON data to your procedure (method).
 
-Takes your return value (scalar or arrayref or hashref).
+Takes your returned value (scalar or arrayref or hashref).
 
 Sends a response.
 
@@ -526,7 +536,8 @@ An alias to C<dispatch>.
 
 =item handle
 
-Runs server object.
+Runs server object and returns a response.
+
 
 =item raise_error(%hash)
 
@@ -535,19 +546,22 @@ Runs server object.
     message => "This is error in my procedure."
  );
 
+Sets an error.
 An error code number in your procedure is an integer between 501 and 899.
 
 
 =item json
 
 Setter/Getter to json encoder/decoder object.
-Default is L<JSON::PP>:
+The default value is L<JSON> object in the below way:
 
- JSON::PP->new->utf8
+ JSON->new->utf8
 
 In your procedure, changes its behaviour.
 
  $server->json->utf8(0);
+
+The JSON coder creating method is  C<create_json_coder>.
 
 
 =item version
@@ -591,7 +605,7 @@ It is used by JSON::RPC::Server subclass.
 
 =item retrieve_json_from_get
 
-In protocol v1.1, 'GET' request method is allow.
+In the protocol v1.1, 'GET' request method is also allowable.
 
 It is used by JSON::RPC::Server subclass.
 
@@ -623,6 +637,13 @@ It must return a message.
      return $translation_jp_message{$code};
  }
 
+
+=item create_json_coder
+(Class method)
+Returns a JSON de/encoder in C<new>.
+You can override it to use your favorite JSON de/encode.
+
+
 =back
 
 
@@ -639,6 +660,8 @@ There is JSON::RPC::Server::system::describe for default response of 'system.des
 
 
 =head1 SEE ALSO
+
+L<JSON>
 
 L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html>
 

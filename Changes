@@ -1,5 +1,13 @@
 Revision history for Perl extension JSON::RPC.
 
+0.90  Wed Dec 19 13:26:15 2007
+	- Now default JSON coder is JSON! (1.99 or later)
+	- added JSON::RPC::Server::FastCGI written by Faiz Kazi, thanks!
+	- added JSONRPC for guide to this distribution.
+	- cleaned up JSON::RPC::Server::CGI
+	- added create_json_coder().
+	- modified J::R::Server::* as base.pm does not work well in Perl 5.005
+
 
 0.01  Mon May 21 14:18:33 2007
 	- original version

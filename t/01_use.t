@@ -9,7 +9,6 @@ use JSON::RPC::Server;
 ok(1); # If we made it this far, we're ok.
 
 END {
-warn "\nJSON::RPC::Server::CGI requires CGI.pm (>= 2.9.2)."
- if(CGI->VERSION < 2.92);
+    warn "\nJSON::RPC::Server::CGI requires CGI.pm (>= 2.9.2)." if(CGI->VERSION < 2.92);
 }
 

@@ -1,13 +1,14 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         JSON-RPC
-version:      0.01
+version:      0.90
 version_from: lib/JSON/RPC.pm
 installdirs:  site
 requires:
+    CGI:                           	
     HTTP::Request:                 0
     HTTP::Response:                0
-    JSON:                          1.12
+    JSON:                          1.99
     Test::More:                    0
 
 distribution_type: module
