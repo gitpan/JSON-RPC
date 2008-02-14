@@ -2,15 +2,12 @@
 package JSON::RPC::Server::CGI;
 
 use strict;
-#use Data::Dumper;
-
-
 use CGI;
 use JSON::RPC::Server; # for old Perl 5.005
+
 use base qw(JSON::RPC::Server);
 
-$JSON::RPC::Server::CGI::VERSION = '0.90';
-
+$JSON::RPC::Server::CGI::VERSION = '0.91';
 
 sub new {
     my $class = shift;
@@ -44,7 +41,9 @@ sub retrieve_json_from_get {
 
     my $method = $cgi->path_info;
 
-    $method =~ s/^\///;
+#    $method =~ s/^\///;
+    $method =~ s{^.*/}{};
+    $self->{path_info} =~ s{/?[^/]+$}{};
 
     $self->json->encode({
         version => '1.1',

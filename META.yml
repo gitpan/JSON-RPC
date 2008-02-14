@@ -1,15 +1,18 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         JSON-RPC
-version:      0.91
-version_from: lib/JSON/RPC.pm
-installdirs:  site
-requires:
-    CGI:                           	
+--- #YAML:1.0
+name:                JSON-RPC
+version:             0.92
+abstract:            Perl implementation of JSON-RPC 1.1 protocol
+license:             ~
+author:              
+    - Makamaka Hannyaharamitu, E<lt>makamaka[at]cpan.orgE<gt>
+generated_by:        ExtUtils::MakeMaker version 6.42
+distribution_type:   module
+requires:     
+    CGI:                           2.92
     HTTP::Request:                 0
     HTTP::Response:                0
-    JSON:                          1.99
+    JSON:                          2
     Test::More:                    0
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.30
+meta-spec:
+    url:     http://module-build.sourceforge.net/META-spec-v1.3.html
+    version: 1.3

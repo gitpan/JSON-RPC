@@ -1,6 +1,8 @@
 package JSONRPC;
 
-$JSONRPC::VERSION = '1.00';
+use strict;
+
+$JSONRPC::VERSION = '1.01';
 
 warn "JSONRPC is deprecated. Please try to use JSON::RPC.";
 

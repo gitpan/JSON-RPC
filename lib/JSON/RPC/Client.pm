@@ -11,7 +11,7 @@ use Carp ();
 
 package JSON::RPC::Client;
 
-$JSON::RPC::Client::VERSION = '0.91';
+$JSON::RPC::Client::VERSION = '0.92';
 
 use LWP::UserAgent;
 
@@ -37,7 +37,9 @@ sub AUTOLOAD {
 
     return if ($method eq 'DESTROY');
 
-    return unless (exists $self->allow_call->{$method});
+    unless ( exists $self->allow_call->{ $method } ) {
+        Carp::croak("Can't call the method not allowed by prepare().");
+    }
 
     my @params = @_;
     my $obj = {
@@ -47,7 +49,13 @@ sub AUTOLOAD {
 
     my $ret = $self->call($self->uri, $obj);
 
-    return ($ret and $ret->is_success) ? $ret->result : undef;
+    if ( $ret and $ret->is_success ) {
+        return $ret->result;
+    }
+    else {
+        Carp::croak ( $ret ? '(Server error) ' . $ret->error_message : $self->status_line );
+    }
+
 }
 
 
@@ -93,7 +101,7 @@ sub call {
         $result = $self->_post($uri, $obj);
     }
 
-    my $service = $obj->{method} =~ /^system\./;
+    my $service = $obj->{method} =~ /^system\./ if ( $obj );
 
     $self->status_line($result->status_line);
 
@@ -102,10 +110,10 @@ sub call {
         return unless($result->content); # notification?
 
         if ($service) {
-            return JSON::RPC::ServiceObject->new($result);
+            return JSON::RPC::ServiceObject->new($result, $self->json);
         }
 
-        return JSON::RPC::ReturnObject->new($result);
+        return JSON::RPC::ReturnObject->new($result, $self->json);
     }
     else {
         return;
@@ -172,8 +180,8 @@ BEGIN {
 
 
 sub new {
-    my ($class, $obj) = @_;
-    my $content = JSON->new->decode($obj->content);
+    my ($class, $obj, $json) = @_;
+    my $content = ( $json || JSON->new->utf8 )->decode( $obj->content );
 
     my $self = bless {
         jsontext  => $obj->content,
@@ -236,33 +244,35 @@ JSON::RPC::Client - Perl implementation of JSON-RPC client
 
 =head1 SYNOPSIS
 
- use JSON::RPC::Client;
- 
- my $client = new JSON::RPC::Client;
- my $url    = 'http://www.example.com/jsonrpc/API';
- 
- my $callobj = {
-    method  => 'sum',
-    params  => [ 17, 25 ], # ex.) params => { a => 20, b => 10 } for JSON-RPC v1.1
- };
- 
- my $res = $client->call($uri, $callobj);
- 
- if($res) {
-    if ($res->is_error) {
-        print "Error : ", $res->error_message;
-    }
-    else {
-        print $res->result;
-    }
- }
- else {
-    print $client->status_line;
- }
- 
- 
- $client->prepare($uri, ['sum', 'echo']);
- print $client->sum(10, 23);
+   use JSON::RPC::Client;
+   
+   my $client = new JSON::RPC::Client;
+   my $url    = 'http://www.example.com/jsonrpc/API';
+   
+   my $callobj = {
+      method  => 'sum',
+      params  => [ 17, 25 ], # ex.) params => { a => 20, b => 10 } for JSON-RPC v1.1
+   };
+   
+   my $res = $client->call($uri, $callobj);
+   
+   if($res) {
+      if ($res->is_error) {
+          print "Error : ", $res->error_message;
+      }
+      else {
+          print $res->result;
+      }
+   }
+   else {
+      print $client->status_line;
+   }
+   
+   
+   # Easy access
+   
+   $client->prepare($uri, ['sum', 'echo']);
+   print $client->sum(10, 23);
  
 
 =head1 DESCRIPTION
@@ -270,13 +280,13 @@ JSON::RPC::Client - Perl implementation of JSON-RPC client
 This is JSON-RPC Client.
 See L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html>.
 
-Gets perl object and convert to JSON data.
+Gets a perl object and convert to a JSON request data.
 
-Sends request.
+Sends the request to a server.
 
-Gets response.
+Gets a response returned by the server.
 
-Converts JSON data to perl object.
+Converts the JSON response data to the perl object.
 
 
 =head1 JSON::RPC::Client
@@ -285,15 +295,15 @@ Converts JSON data to perl object.
 
 =over
 
-=item new
+=item $client = JSON::RPC::Client->new
 
 Creates new JSON::RPC::Client object.
 
-=item call($uri, $procedure_object)
+=item $response = $client->call($uri, $procedure_object)
 
-Requests to $uri with $procedure_object.
-Reuest method is usually 'post'.
-If $uri has query string, method is 'get'.
+Calls to $uri with $procedure_object.
+The request method is usually C<POST>.
+If $uri has query string, method is C<GET>.
 
 About 'GET' method,
 see to L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html#GetProcedureCall>.
@@ -301,20 +311,28 @@ see to L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html#GetProcedureCall>.
 Return value is L</JSON::RPC::ReturnObject>.
 
 
-=item prepare($uri, $arrayref_of_procedure)
+=item $client->prepare($uri, $arrayref_of_procedure)
 
 Allow to call methods in contents of $arrayref_of_procedure.
-Return value is a result part of JSON::RPC::ReturnObject.
+Then you can call the prepared methods with an array reference or a list.
 
- $client->prepare($uri, ['sum', 'echo']);
- my $res = $client->echo('foobar'); # $res is 'foobar'.
+The return value is a result part of JSON::RPC::ReturnObject.
 
-Currently, can't call method name same as built-in method.
+   $client->prepare($uri, ['sum', 'echo']);
+   
+   $res = $client->echo('foobar');  # $res is 'foobar'.
+   
+   $res = $client->sum(10, 20);     # sum up
+   $res = $client->sum( [10, 20] ); # same as above
 
+If you call a method which is not prepared, it will C<croak>.
+
+
+Currently, B<can't call any method names as same as built-in methods>.
 
 =item version
 
-Sets JSON-RPC protocol version.
+Sets the JSON-RPC protocol version.
 1.1 by default.
 
 
@@ -324,7 +342,7 @@ Sets a request identifier.
 In JSON-RPC 1.1, it is optoinal.
 
 If you set C<version> 1.0 and don't set id,
-the module sets 'JSON::RPC::Client'.
+the module sets 'JSON::RPC::Client' to it.
 
 
 =item ua
@@ -334,16 +352,27 @@ Setter/getter to L<LWP::UserAgent> object.
 
 =item json
 
-Setter/getter to JSON coder object.
-Default is L<JSON::PP>, likes this:
+Setter/getter to the JSON coder object.
+Default is L<JSON>, likes this:
 
- $self->json( JSON::PP->new->allow_nonref->utf8 );
+   $self->json( JSON->new->allow_nonref->utf8 );
+   
+   $json = $self->json;
+
+This object serializes/deserializes JSON data.
+By default, returned JSON data assumes UTF-8 encoded.
 
 
 =item status_line
 
 Returns status code;
-After C<call> remote procedure, a status code is set.
+After C<call> a remote procedure, the status code is set.
+
+=item create_json_coder
+
+(Class method)
+Returns a JSON de/encoder in C<new>.
+You can override it to use your favorite JSON de/encoder.
 
 
 =back
@@ -351,23 +380,41 @@ After C<call> remote procedure, a status code is set.
 
 =head1 JSON::RPC::ReturnObject
 
+C<call> method or the methods set by C<prepared> returns this object.
+(The returned JSON data is decoded by the JSON coder object which was passed
+by the client object.)
+
 =head2 METHODS
 
 =over
 
 =item is_success
 
+If the call is successful, returns a true, otherwise a false.
+
 =item is_error
+
+If the call is not successful, returns a true, otherwise a false.
 
 =item error_message
 
+If the response contains an error message, returns it.
+
 =item result
+
+Returns the result part of a data structure returned by the called server.
 
 =item content
 
+Returns the whole data structure returned by the called server.
+
 =item jsontext
 
+Returns the row JSON data.
+
 =item version
+
+Returns the version of this response data.
 
 =back
 

@@ -6,11 +6,6 @@ use strict;
 use lib qw(/var/www/cgi-bin/json/);
 use base qw(JSON::RPC::Server);
 
-use vars qw($VERSION);
-
-$VERSION = '0.02';
-
-
 use Apache2::Const qw(OK HTTP_BAD_REQUEST SERVER_ERROR);
 
 use APR::Table ();
@@ -19,7 +14,7 @@ use Apache2::RequestIO ();
 use Apache2::RequestUtil ();
 
 
-$JSON::RPC::Server::Apache::VERSION = '0.01';
+$JSON::RPC::Server::Apache::VERSION = '0.03';
 
 
 sub handler {
@@ -60,12 +55,50 @@ sub retrieve_json_from_post {
     while( $r->read($buf,$len) ){
         $content .= $buf;
     }
-#print STDERR "$content", "\n";
+
     $content;
 }
 
 
 sub retrieve_json_from_get {
+    my $self = shift;
+    my $r    = $self->request;
+    my $args = $r->args;
+
+    $args = '' if (!defined $args);
+
+    $self->{path_info} = $r->path_info;
+
+    my $params = {};
+
+    $self->version(1.1);
+
+    for my $pair (split/&/, $args) {
+        my ($key, $value) = split/=/, $pair;
+        if ( defined ( my $val = $params->{ $key } ) ) {
+            if ( ref $val ) {
+                push @{ $params->{ $key } }, $value;
+            }
+            else { # change a scalar into an arrayref
+                $params->{ $key } = [];
+                push @{ $params->{ $key } }, $val, $value;
+            }
+        }
+        else {
+            $params->{ $key } = $value;
+        }
+    }
+
+    my $method = $r->path_info;
+
+    $method =~ s{^.*/}{};
+    $self->{path_info} =~ s{/?[^/]+$}{};
+
+    $self->json->encode({
+        version => '1.1',
+        method  => $method,
+        params  => $params,
+    });
 }
 
 

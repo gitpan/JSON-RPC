@@ -1,8 +1,30 @@
 Revision history for Perl extension JSON::RPC.
 
+###### In the next large version up ######################################
+
+  * JSON::RPC::Server::Apache will be renamed to JSON::RPC::Server::Apache2
+      and split into another distribution.
+  * JSON::RPC::Server::Apache really supports apache 1.3x
+      and the maintainer will be changed.
+  * the maintainer of JSON::RPC::Server::FastCGI will be changed
+      and split into another distribution.
+
+##########################################################################
+
+0.92  Thu Feb 14 13:12:40 2008
+	- modified the JSON::RPC::Client prepare mode to check response errors.
+	    (Thanks to Colin Meyer)
+	- fixed retrieve_json_from_get in JSON::RPC::Server::CGI.
+	- implemented JSON::RPC::Server::Apache to support the GET method call.
+	- fixed JSON::RPC::ReturnObject decoding JSON data with utf8 mode.
+	    ($client -> call() ->result will return Unicode characters (if contained).)
+	- added some descriptions to the JSON::RPC::Client pod.
+
+
 0.91  Wed Dec 19 15:51:53 2007
 	- JSON::RPC::Client used JSON::PP.
 	- added create_json_coder() to JSON::RPC::Client.
+
 
 0.90  Wed Dec 19 13:26:15 2007
 	- Now default JSON coder is JSON! (1.99 or later)
