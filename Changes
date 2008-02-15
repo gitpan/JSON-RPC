@@ -11,6 +11,16 @@ Revision history for Perl extension JSON::RPC.
 
 ##########################################################################
 
+0.93  Fri Feb 15 14:46:17 2008
+	- added example codes.
+	- now AUTOLOAD method after prepare() can support built-in methods.
+	    $client -> __VERSION__ ( => $client calls the name 'VERSION' procedure )
+	- Your application can set subroutines allowable by allowable_procedure().
+	    (Thanks to seagull's suggestion)
+	- JSON::RPC::Server::Apache config supports 'return_die_message'.
+	- require LWP::UserAgent 2.001 or later.
+
+
 0.92  Thu Feb 14 13:12:40 2008
 	- modified the JSON::RPC::Client prepare mode to check response errors.
 	    (Thanks to Colin Meyer)

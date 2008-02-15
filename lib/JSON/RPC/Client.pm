@@ -11,7 +11,7 @@ use Carp ();
 
 package JSON::RPC::Client;
 
-$JSON::RPC::Client::VERSION = '0.92';
+$JSON::RPC::Client::VERSION = '0.93';
 
 use LWP::UserAgent;
 
@@ -37,6 +37,8 @@ sub AUTOLOAD {
 
     return if ($method eq 'DESTROY');
 
+    $method =~ s/^__(\w+)__$/$1/;  # avoid to call built-in methods (ex. __VERSION__ => VERSION)
+
     unless ( exists $self->allow_call->{ $method } ) {
         Carp::croak("Can't call the method not allowed by prepare().");
     }
@@ -53,7 +55,7 @@ sub AUTOLOAD {
         return $ret->result;
     }
     else {
-        Carp::croak ( $ret ? '(Server error) ' . $ret->error_message : $self->status_line );
+        Carp::croak ( $ret ? '(Procedure error) ' . $ret->error_message : $self->status_line );
     }
 
 }
@@ -446,7 +448,7 @@ Makamaka Hannyaharamitu, E<lt>makamaka[at]cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2007 by Makamaka Hannyaharamitu
+Copyright 2007-2008 by Makamaka Hannyaharamitu
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 

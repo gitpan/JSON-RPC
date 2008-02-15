@@ -25,7 +25,8 @@ BEGIN {
 }
 
 
-$JSON::RPC::Server::VERSION = '0.90';
+$JSON::RPC::Server::VERSION = '0.91';
+
 
 BEGIN {
     for my $method (qw/request path_info json version error_message max_length charset content_type
@@ -266,7 +267,8 @@ sub _find_procedure {
 
         if (my $pkg = $self->{dispatch_path}->{$path}) {
 
-            return if ($classname and $pkg ne $classname);
+            return if ( $classname and $pkg ne $classname );
+            return if ( $JSONRPC_Procedure_Able and JSON::RPC::Procedure->can( $method ) );
 
             $self->_load_module($pkg);
 
@@ -278,7 +280,8 @@ sub _find_procedure {
     else {
         for my $pkg (@{$self->{loaded_module}->{order}}) {
 
-            next if ($classname and $pkg ne $classname);
+            next if ( $classname and $pkg ne $classname );
+            next if ( $JSONRPC_Procedure_Able and JSON::RPC::Procedure->can( $method ) );
 
             if ($system_call) { $pkg .= '::system' }
 
@@ -295,7 +298,19 @@ sub _find_procedure {
 sub _method_is_ebable {
     my ($self, $pkg, $method, $system_call) = @_;
 
-    if (my $code = $pkg->can($method)) {
+    my $allowable_procedure = $pkg->can('allowable_procedure');
+    my $code;
+
+    if ( $allowable_procedure ) {
+        if ( exists $allowable_procedure->()->{ $method } ) {
+            $code = $allowable_procedure->()->{ $method };
+        }
+        else {
+            return;
+        }
+    }
+
+    if ( $code or ( $code = $pkg->can($method) ) ) {
         return {code =>  $code} if ($system_call or !$JSONRPC_Procedure_Able);
 
         if ( my $procedure = JSON::RPC::Procedure::check($pkg, $code) ) {
@@ -470,6 +485,7 @@ JSON::RPC::Server - Perl implementation of JSON-RPC sever
       SetHandler perl-script
       PerlResponseHandler JSON::RPC::Server::Apache
       PerlSetVar dispatch "MyApp"
+      PerlSetVar return_die_message 0
  </Location>
  
  
@@ -674,7 +690,7 @@ Makamaka Hannyaharamitu, E<lt>makamaka[at]cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2007 by Makamaka Hannyaharamitu
+Copyright 2007-2008 by Makamaka Hannyaharamitu
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 

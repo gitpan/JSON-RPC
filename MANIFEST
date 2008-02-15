@@ -14,4 +14,12 @@ README
 t/00_pod.t
 t/01_use.t
 t/02_server.t
+
+ex/client.pl
+ex/server.cgi
+ex/serverd.pl
+ex/jsonrpc.conf
+ex/MyApp.pm
+ex/MyApp/Subclass.pm
+
 META.yml                                 Module meta-data (added by MakeMaker)

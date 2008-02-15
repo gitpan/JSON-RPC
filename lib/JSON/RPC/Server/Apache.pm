@@ -6,7 +6,7 @@ use strict;
 use lib qw(/var/www/cgi-bin/json/);
 use base qw(JSON::RPC::Server);
 
-use Apache2::Const qw(OK HTTP_BAD_REQUEST SERVER_ERROR);
+use Apache2::Const -compile => qw(OK HTTP_BAD_REQUEST SERVER_ERROR);
 
 use APR::Table ();
 use Apache2::RequestRec ();
@@ -14,7 +14,7 @@ use Apache2::RequestIO ();
 use Apache2::RequestUtil ();
 
 
-$JSON::RPC::Server::Apache::VERSION = '0.03';
+$JSON::RPC::Server::Apache::VERSION = '0.04';
 
 
 sub handler {
@@ -27,6 +27,8 @@ sub handler {
     $s->{path_info} = $r->path_info;
 
     my @modules = $r->dir_config('dispatch') || $r->dir_config('dispatch_to');
+
+    $s->return_die_message( $r->dir_config('return_die_message') );
 
     $s->dispatch([@modules]);
 
