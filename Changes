@@ -11,6 +11,10 @@ Revision history for Perl extension JSON::RPC.
 
 ##########################################################################
 
+0.94  Fri Feb 15 15:16:32 2008
+	- no change but examples was forgotten.
+
+
 0.93  Fri Feb 15 14:46:17 2008
 	- added example codes.
 	- now AUTOLOAD method after prepare() can support built-in methods.

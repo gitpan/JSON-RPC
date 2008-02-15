@@ -5,8 +5,8 @@ use strict;
 use JSON::RPC::Client;
 
 
-my $cgi_uri = 'http://www.well-ness.jp/cgi-bin/json/server.cgi/API'; # CGI
-my $uri     = 'http://www.well-ness.jp/jsonrpc/API'; # Apache2 or daemon
+my $cgi_uri = 'http://example.com/cgi-bin/json/server.cgi/API'; # CGI
+my $uri     = 'http://example.com/jsonrpc/API'; # Apache2 or daemon
 
 
 my $client = new JSON::RPC::Client;
