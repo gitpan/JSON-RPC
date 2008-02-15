@@ -1,4 +1,5 @@
-package MyApp;
+package
+    MyApp;
 
 use 5.006;
 use strict;
@@ -62,7 +63,8 @@ sub sum4 : Private {
 
 
 
-package MyApp::system;
+package
+    MyApp::system;
 
 sub describe {
     {
@@ -80,7 +82,7 @@ __END__
 
 =head1 NAME
 
-MyApp - JSON-RPC server sample class
+MyApp - sample JSON-RPC server class
 
 =head1 DESCRIPTION
 

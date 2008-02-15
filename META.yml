@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                JSON-RPC
-version:             0.94
+version:             0.95
 abstract:            Perl implementation of JSON-RPC 1.1 protocol
 license:             ~
 author:              

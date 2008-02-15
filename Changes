@@ -11,6 +11,11 @@ Revision history for Perl extension JSON::RPC.
 
 ##########################################################################
 
+0.95  Fri Feb 15 16:01:04 2008
+	- sample codes were indexed...!
+	    fixed package for avoiding the indexer.
+
+
 0.94  Fri Feb 15 15:16:32 2008
 	- no change but examples was forgotten.
 

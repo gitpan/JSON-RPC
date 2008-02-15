@@ -1,4 +1,5 @@
-package MyApp::Subclass;
+package
+    MyApp::Subclass;
 
 
 use strict;
@@ -18,7 +19,8 @@ __END__
 
 =head1 NAME
 
-MyApp::Subclass - JSON-RPC server sample class
+MyApp::Subclass - sample JSON-RPC server class
+
 
 =head1 DESCRIPTION
 
