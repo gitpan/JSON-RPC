@@ -2,7 +2,7 @@ package JSON::RPC;
 
 use strict;
 
-$JSON::RPC::VERSION = '0.95';
+$JSON::RPC::VERSION = '0.96';
 
 
 1;

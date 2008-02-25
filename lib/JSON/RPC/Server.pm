@@ -25,7 +25,7 @@ BEGIN {
 }
 
 
-$JSON::RPC::Server::VERSION = '0.91';
+$JSON::RPC::Server::VERSION = '0.92';
 
 
 BEGIN {
@@ -655,6 +655,7 @@ It must return a message.
 
 
 =item create_json_coder
+
 (Class method)
 Returns a JSON de/encoder in C<new>.
 You can override it to use your favorite JSON de/encode.

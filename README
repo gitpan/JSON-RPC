@@ -1,4 +1,4 @@
-JSON::RPC version 0.90
+JSON::RPC version 0.96
 =================
 NAME
     JSON::RPC - Perl implementation of JSON-RPC 1.1 protocol
@@ -93,19 +93,16 @@ EXAMPLES
      print $client->sum(10, 23);
  
     See to JSON::RPC::Server::CGI, JSON::RPC::Server::Daemon,
-    JSON::RPC::Server::Apache JSON::RPC::Client and JSON::RPC::Procedure.
+    JSON::RPC::Server::Apache2 JSON::RPC::Client and JSON::RPC::Procedure.
 
 ABOUT NEW VERSION
     supports JSON-RPC protocol v1.1
-TODO
-    Document
-    Examples
-    More Tests
+
 AUTHOR
     Makamaka Hannyaharamitu, <makamaka[at]cpan.org>
 
 COPYRIGHT AND LICENSE
-    Copyright 2007 by Makamaka Hannyaharamitu
+    Copyright 2007-2008 by Makamaka Hannyaharamitu
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.

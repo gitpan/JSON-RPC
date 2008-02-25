@@ -3,9 +3,8 @@ lib/JSON/RPC.pm
 lib/JSON/RPC/Client.pm
 lib/JSON/RPC/Server.pm
 lib/JSON/RPC/Procedure.pm
-lib/JSON/RPC/Server/Apache.pm
+lib/JSON/RPC/Server/Apache2.pm
 lib/JSON/RPC/Server/CGI.pm
-lib/JSON/RPC/Server/FastCGI.pm
 lib/JSON/RPC/Server/Daemon.pm
 lib/JSONRPC.pm
 Makefile.PL

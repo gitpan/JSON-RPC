@@ -6,10 +6,16 @@ Revision history for Perl extension JSON::RPC.
       and split into another distribution.
   * JSON::RPC::Server::Apache really supports apache 1.3x
       and the maintainer will be changed.
-  * the maintainer of JSON::RPC::Server::FastCGI will be changed
-      and split into another distribution.
 
 ##########################################################################
+
+0.96  Mon Feb 25 11:06:25 2008
+	- JSON::RPC::Server::FastCGI was split into the independent distribution.
+	    the new maintainer is Faiz Kazi.
+	- JSON::RPC::Server::Apache was renamed to JSON::RPC::Server::Apache2
+	    it will split into another distribution.
+	- added and updated docs.
+
 
 0.95  Fri Feb 15 16:01:04 2008
 	- sample codes were indexed...!
