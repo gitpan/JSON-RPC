@@ -1,19 +1,37 @@
---- #YAML:1.0
-name:                JSON-RPC
-version:             0.96
-abstract:            Perl implementation of JSON-RPC 1.1 protocol
-license:             ~
-author:              
-    - Makamaka Hannyaharamitu, E<lt>makamaka[at]cpan.orgE<gt>
-generated_by:        ExtUtils::MakeMaker version 6.42
-distribution_type:   module
-requires:     
-    CGI:                           2.92
-    HTTP::Request:                 0
-    HTTP::Response:                0
-    JSON:                          2
-    LWP::UserAgent:                2.001
-    Test::More:                    0
+---
+abstract: 'JSON RPC 2.0 Server Implementation'
+author:
+  - 'Daisuke Maki'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+  Plack::Request: 0
+  Plack::Test: 0
+  Test::More: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
+distribution_type: module
+generated_by: 'Module::Install version 1.01'
+license: perl
 meta-spec:
-    url:     http://module-build.sourceforge.net/META-spec-v1.3.html
-    version: 1.3
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: JSON-RPC
+no_index:
+  directory:
+    - inc
+    - t
+recommends:
+  JSON::XS: 0
+requires:
+  CGI: 0
+  Class::Accessor::Lite: 0
+  HTTP::Request: 0
+  HTTP::Response: 0
+  JSON: 0
+  LWP::UserAgent: 0
+  Plack: 0
+  Router::Simple: 0
+  parent: 0
+resources:
+  license: http://dev.perl.org/licenses/
+version: 1.00_01

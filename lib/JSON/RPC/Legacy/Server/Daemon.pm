@@ -1,11 +1,11 @@
 ##############################################################################
-package JSON::RPC::Server::Daemon;
+package JSON::RPC::Legacy::Server::Daemon;
 
 use strict;
-use JSON::RPC::Server; # for old Perl 5.005
-use base qw(JSON::RPC::Server);
+use JSON::RPC::Legacy::Server; # for old Perl 5.005
+use base qw(JSON::RPC::Legacy::Server);
 
-$JSON::RPC::Server::Daemon::VERSION = '0.03';
+$JSON::RPC::Legacy::Server::Daemon::VERSION = '0.03';
 
 use Data::Dumper;
 
@@ -68,16 +68,16 @@ __END__
 
 =head1 NAME
 
-JSON::RPC::Server::Daemon - JSON-RPC sever for daemon
+JSON::RPC::Legacy::Server::Daemon - JSON-RPC sever for daemon
 
 =head1 SYNOPSIS
 
  # Daemon version
  #--------------------------
  # In your daemon server script
- use JSON::RPC::Server::Daemon;
+ use JSON::RPC::Legacy::Server::Daemon;
  
- JSON::RPC::Server::Daemon->new(LocalPort => 8080);
+ JSON::RPC::Legacy::Server::Daemon->new(LocalPort => 8080);
                           ->dispatch({'/jsonrpc/API' => 'MyApp'})
                           ->handle();
  
@@ -85,10 +85,10 @@ JSON::RPC::Server::Daemon - JSON-RPC sever for daemon
  # In your application class
  package MyApp;
  
- use base qw(JSON::RPC::Procedure); # Perl 5.6 or more than
+ use base qw(JSON::RPC::Legacy::Procedure); # Perl 5.6 or more than
  
  sub echo : Public {    # new version style. called by clients
-     # first argument is JSON::RPC::Server object.
+     # first argument is JSON::RPC::Legacy::Server object.
      return $_[1];
  }
  
@@ -113,14 +113,14 @@ This module is for http daemon servers using L<HTTP::Daemon> or L<HTTP::Daemon::
 
 =head1 METHODS
 
-They are inherited from the L<JSON::RPC::Server> methods basically.
-The below methods are implemented in JSON::RPC::Server::Daemon.
+They are inherited from the L<JSON::RPC::Legacy::Server> methods basically.
+The below methods are implemented in JSON::RPC::Legacy::Server::Daemon.
 
 =over
 
 =item new
 
-Creates new JSON::RPC::Server::Daemon object.
+Creates new JSON::RPC::Legacy::Server::Daemon object.
 Arguments are passed to L<HTTP::Daemon> or L<HTTP::Daemon::SSL>.
 
 =item handle
@@ -148,9 +148,9 @@ L<HTTP::Daemon>,
 
 L<HTTP::Daemon::SSL>,
 
-L<JSON::RPC::Server>,
+L<JSON::RPC::Legacy::Server>,
 
-L<JSON::RPC::Procedure>,
+L<JSON::RPC::Legacy::Procedure>,
 
 L<JSON>,
 

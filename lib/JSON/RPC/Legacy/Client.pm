@@ -9,9 +9,9 @@ use Carp ();
 
 ##############################################################################
 
-package JSON::RPC::Client;
+package JSON::RPC::Legacy::Client;
 
-$JSON::RPC::Client::VERSION = '0.93';
+$JSON::RPC::Legacy::Client::VERSION = '0.93';
 
 use LWP::UserAgent;
 
@@ -31,7 +31,7 @@ BEGIN {
 
 sub AUTOLOAD {
     my $self   = shift;
-    my $method = $JSON::RPC::Client::AUTOLOAD;
+    my $method = $JSON::RPC::Legacy::Client::AUTOLOAD;
 
     $method =~ s/.*:://;
 
@@ -71,7 +71,7 @@ sub new {
     my $self  = bless {}, (ref $proto ? ref $proto : $proto);
 
     my $ua  = LWP::UserAgent->new(
-        agent   => 'JSON::RPC::Client/' . $JSON::RPC::Client::VERSION . ' beta ',
+        agent   => 'JSON::RPC::Legacy::Client/' . $JSON::RPC::Legacy::Client::VERSION . ' beta ',
         timeout => 10,
     );
 
@@ -112,10 +112,10 @@ sub call {
         return unless($result->content); # notification?
 
         if ($service) {
-            return JSON::RPC::ServiceObject->new($result, $self->json);
+            return JSON::RPC::Legacy::ServiceObject->new($result, $self->json);
         }
 
-        return JSON::RPC::ReturnObject->new($result, $self->json);
+        return JSON::RPC::Legacy::ReturnObject->new($result, $self->json);
     }
     else {
         return;
@@ -135,7 +135,7 @@ sub _post {
             $self->id($obj->{id}) if ($obj->{id}); # if undef, it is notification.
         }
         else {
-            $obj->{id} = $self->id || ($self->id('JSON::RPC::Client'));
+            $obj->{id} = $self->id || ($self->id('JSON::RPC::Legacy::Client'));
         }
     }
     else {
@@ -165,9 +165,9 @@ sub _get {
 
 ##############################################################################
 
-package JSON::RPC::ReturnObject;
+package JSON::RPC::Legacy::ReturnObject;
 
-$JSON::RPC::ReturnObject::VERSION = $JSON::RPC::VERSION;
+$JSON::RPC::Legacy::ReturnObject::VERSION = $JSON::RPC::Legacy::VERSION;
 
 BEGIN {
     for my $method (qw/is_success content jsontext version/) {
@@ -212,9 +212,9 @@ sub result {
 
 ##############################################################################
 
-package JSON::RPC::ServiceObject;
+package JSON::RPC::Legacy::ServiceObject;
 
-use base qw(JSON::RPC::ReturnObject);
+use base qw(JSON::RPC::Legacy::ReturnObject);
 
 
 sub sdversion {
@@ -242,13 +242,13 @@ __END__
 
 =head1 NAME
 
-JSON::RPC::Client - Perl implementation of JSON-RPC client
+JSON::RPC::Legacy::Client - Perl implementation of JSON-RPC client
 
 =head1 SYNOPSIS
 
-   use JSON::RPC::Client;
+   use JSON::RPC::Legacy::Client;
    
-   my $client = new JSON::RPC::Client;
+   my $client = new JSON::RPC::Legacy::Client;
    my $url    = 'http://www.example.com/jsonrpc/API';
    
    my $callobj = {
@@ -291,15 +291,15 @@ Gets a response returned by the server.
 Converts the JSON response data to the perl object.
 
 
-=head1 JSON::RPC::Client
+=head1 JSON::RPC::Legacy::Client
 
 =head2 METHODS
 
 =over
 
-=item $client = JSON::RPC::Client->new
+=item $client = JSON::RPC::Legacy::Client->new
 
-Creates new JSON::RPC::Client object.
+Creates new JSON::RPC::Legacy::Client object.
 
 =item $response = $client->call($uri, $procedure_object)
 
@@ -310,7 +310,7 @@ If $uri has query string, method is C<GET>.
 About 'GET' method,
 see to L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html#GetProcedureCall>.
 
-Return value is L</JSON::RPC::ReturnObject>.
+Return value is L</JSON::RPC::Legacy::ReturnObject>.
 
 
 =item $client->prepare($uri, $arrayref_of_procedure)
@@ -318,7 +318,7 @@ Return value is L</JSON::RPC::ReturnObject>.
 Allow to call methods in contents of $arrayref_of_procedure.
 Then you can call the prepared methods with an array reference or a list.
 
-The return value is a result part of JSON::RPC::ReturnObject.
+The return value is a result part of JSON::RPC::Legacy::ReturnObject.
 
    $client->prepare($uri, ['sum', 'echo']);
    
@@ -344,7 +344,7 @@ Sets a request identifier.
 In JSON-RPC 1.1, it is optoinal.
 
 If you set C<version> 1.0 and don't set id,
-the module sets 'JSON::RPC::Client' to it.
+the module sets 'JSON::RPC::Legacy::Client' to it.
 
 
 =item ua
@@ -380,7 +380,7 @@ You can override it to use your favorite JSON de/encoder.
 =back
 
 
-=head1 JSON::RPC::ReturnObject
+=head1 JSON::RPC::Legacy::ReturnObject
 
 C<call> method or the methods set by C<prepared> returns this object.
 (The returned JSON data is decoded by the JSON coder object which was passed
@@ -420,19 +420,19 @@ Returns the version of this response data.
 
 =back
 
-=head1 JSON::RPC::ServiceObject
+=head1 JSON::RPC::Legacy::ServiceObject
 
 
 =head1 RESERVED PROCEDURE
 
 When a client call a procedure (method) name 'system.foobar',
-JSON::RPC::Server look up MyApp::system::foobar.
+JSON::RPC::Legacy::Server look up MyApp::system::foobar.
 
 L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html#ProcedureCall>
 
 L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html#ServiceDescription>
 
-There is JSON::RPC::Server::system::describe for default response of 'system.describe'.
+There is JSON::RPC::Legacy::Server::system::describe for default response of 'system.describe'.
 
 
 =head1 SEE ALSO

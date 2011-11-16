@@ -1,10 +1,10 @@
 ##############################################################################
-package JSON::RPC::Server::Apache2;
+package JSON::RPC::Legacy::Server::Apache2;
 
 use strict;
 
 use lib qw(/var/www/cgi-bin/json/);
-use base qw(JSON::RPC::Server);
+use base qw(JSON::RPC::Legacy::Server);
 
 use Apache2::Const -compile => qw(OK HTTP_BAD_REQUEST SERVER_ERROR);
 
@@ -14,7 +14,7 @@ use Apache2::RequestIO ();
 use Apache2::RequestUtil ();
 
 
-$JSON::RPC::Server::Apache::VERSION = '0.05';
+$JSON::RPC::Legacy::Server::Apache::VERSION = '0.05';
 
 
 sub handler {
@@ -126,7 +126,7 @@ __END__
 
 =head1 NAME
 
-JSON::RPC::Server::Apache2 - JSON-RPC sever for mod_perl2
+JSON::RPC::Legacy::Server::Apache2 - JSON-RPC sever for mod_perl2
 
 =head1 SYNOPSIS
 
@@ -137,7 +137,7 @@ JSON::RPC::Server::Apache2 - JSON-RPC sever for mod_perl2
  
  <Location /jsonrpc/API>
       SetHandler perl-script
-      PerlResponseHandler JSON::RPC::Server::Apache
+      PerlResponseHandler JSON::RPC::Legacy::Server::Apache
       PerlSetVar dispatch "MyApp"
       PerlSetVar return_die_message 0
  </Location>
@@ -146,10 +146,10 @@ JSON::RPC::Server::Apache2 - JSON-RPC sever for mod_perl2
  # In your application class
  package MyApp;
  
- use base qw(JSON::RPC::Procedure); # Perl 5.6 or more than
+ use base qw(JSON::RPC::Legacy::Procedure); # Perl 5.6 or more than
  
  sub echo : Public {    # new version style. called by clients
-     # first argument is JSON::RPC::Server object.
+     # first argument is JSON::RPC::Legacy::Server object.
      return $_[1];
  }
  
@@ -185,14 +185,14 @@ Well, you write your procedure code only.
 
 =head1 METHODS
 
-They are inherited from the L<JSON::RPC::Server> methods basically.
-The below methods are implemented in JSON::RPC::Server::Apache2.
+They are inherited from the L<JSON::RPC::Legacy::Server> methods basically.
+The below methods are implemented in JSON::RPC::Legacy::Server::Apache2.
 
 =over
 
 =item new
 
-Creates new JSON::RPC::Server::Apache2 object.
+Creates new JSON::RPC::Legacy::Server::Apache2 object.
 
 =item handle
 
@@ -215,9 +215,9 @@ returns a response JSON data to a client.
 
 =head1 SEE ALSO
 
-L<JSON::RPC::Server>,
+L<JSON::RPC::Legacy::Server>,
 
-L<JSON::RPC::Procedure>,
+L<JSON::RPC::Legacy::Procedure>,
 
 L<JSON>,
 

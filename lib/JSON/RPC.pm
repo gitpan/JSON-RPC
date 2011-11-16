@@ -1,156 +1,176 @@
 package JSON::RPC;
-
 use strict;
-
-$JSON::RPC::VERSION = '0.96';
-
+our $VERSION = '1.00_01';
 
 1;
-__END__
 
-=pod
+__END__
 
 =head1 NAME
 
-JSON::RPC - Perl implementation of JSON-RPC 1.1 protocol
+JSON::RPC - JSON RPC 2.0 Server Implementation
+
+=head1 SYNOPSIS
+
+    # app.psgi
+    use strict;
+    use JSON::RPC::Dispatcher;
+
+    my $dispatcher = JSON::RPC::Dispatcher->new(
+        prefix => "MyApp::JSONRPC::Handler",
+        router => Router::Simple->new( ... )
+    );
+
+    sub {
+        my $env = shift;
+        $dispatcher->handle_psgi($env);
+    };
 
 =head1 DESCRIPTION
 
- JSON-RPC is a stateless and light-weight remote procedure call (RPC)
- protocol for inter-networking applications over HTTP. It uses JSON
- as the data format for of all facets of a remote procedure call,
- including all application data carried in parameters.
+JSON::RPC is a set of modules that implment JSON RPC 2.0 protocol.
 
-quoted from L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html>.
+    If you are using old JSON::RPC code (up to 0.96), DO NOT EXPECT
+    YOUR CODE TO WORK WITH THIS VERSION. THIS VERSION IS 
+    ****BACKWARDS INCOMPATIBLE****
+
+=head1 BASIC USAGE
+
+The dispatcher is responsible for marshalling the request.
+
+The routing between the JSON RPC methods and their implementors are handled by
+Router::Simple. For example, if you want to map method "foo" to a "MyApp::JSONRPC::Handler" object instance's "handle_foo" method, you specify something like the following in your router instance:
+
+    use Router::Simple::Declare;
+    my $router = router {
+        connect "foo" => {
+            handler => "+MyApp::JSONRPC::Handler",
+            action  => "handle_foo"
+        };
+    };
+
+The "+" prefix in the handler classname denotes that it is already a fully qualified classname. Without the prefix, the value of "prefix" in the dispatcher object will be used to qualify the classname. If you specify it in your Dispatcher instance, you may omit the prefix part to save you some typing:
+
+    use JSON::RPC::Dispatcher;
+    use Router::Simple::Declare;
+
+    my $router = router {
+        connect "foo" => {
+            handler => "Foo",
+            action  => "process",
+        };
+        connect "bar" => {
+            handler => "Bar",
+            action => "process"
+        }
+    };
+    my $dispatcher = JSON::RPC::Dispatcher->new(
+        prefix => "MyApp::JSONRPC::Handler",
+        router => $router,
+    );
+
+    # The above will roughly translate to the following:
+    #
+    # for method "foo"
+    #    my $handler = MyApp::JSONRPC::Handler::Foo->new;
+    #    $handler->process( ... );
+    #
+    # for method "bar"
+    #    my $handler = MyApp::JSONRPC::Handler::Bar->new;
+    #    $handler->process( ... );
 
 
-This module was in JSON package on CPAN before.
-Now its interfaces was completely changed.
+The implementors are called handlers. Handlers are simple objects, and will be instantiated automatically for you. Their return values are converted to JSON objects automatically.
 
-The old modules - L<JSONRPC::Transport::HTTP> and L<Apache::JSONRPC> are deprecated.
-Please try to use JSON::RPC::Server and JSON::RPC::Client which support both JSON-RPC
-protocol version 1.1 and 1.0.
+You may also choose to pass objects in the handler argument to connect in  your router. This will save you the cost of instantiating the handler object, and you also don't have to rely on us instantiating your handler object.
 
+    use Router::Simple::Declare;
+    use MyApp::JSONRPC::Handler;
 
-=head1 EXAMPLES
+    my $handler = MyApp::JSONRPC::Handler->new;
+    my $router = router {
+        connect "foo" => {
+            handler => $handler,
+            action  => "handle_foo"
+        };
+    };
 
-CGI version.
+=head1 HANDLERS
 
- #--------------------------
- # In your application class
- package MyApp;
- 
- use base qw(JSON::RPC::Procedure); # Perl 5.6 or more than
- 
- sub echo : Public {    # new version style. called by clients
-     # first argument is JSON::RPC::Server object.
-     return $_[1];
- }
- 
- 
- sub sum : Public(a:num, b:num) { # sets value into object member a, b.
-     my ($s, $obj) = @_;
-     # return a scalar value or a hashref or an arryaref.
-     return $obj->{a} + $obj->{b};
- }
- 
-  
- sub a_private_method : Private {
-     # ... can't be called by client
- }
- 
- 
- sub sum_old_style {  # old version style. taken as Public
-     my ($s, @arg) = @_;
-    return $arg[0] + $arg[1];
- }
- 
- 
- #--------------------------
- # In your triger script.
- use JSON::RPC::Server::CGI;
- use MyApp;
- 
- # simple
-  JSON::RPC::Server::CGI->dispatch('MyApp')->handle();
- 
- # or 
- JSON::RPC::Server::CGI->dispatch([qw/MyApp FooBar/])->handle();
- 
- # or INFO_PATH version
- JSON::RPC::Server::CGI->dispatch({'/Test' => 'MyApp'})->handle();
- 
- #--------------------------
- # Client
- use JSON::RPC::Client;
- 
- my $client = new JSON::RPC::Client;
+Your handlers are objects responsible for returning some sort of reference structure that can be properly encoded via JSON/JSON::XS. The handler only needs to implement the methods that you specified in your router.
 
- my $uri = 'http://www.example.com/jsonrpc/Test';
- my $obj = {
-    method  => 'sum', # or 'MyApp.sum'
-    params  => [10, 20],
- };
- 
- my $res = $client->call( $uri, $obj )
- 
- if($res){
-    if ($res->is_error) {
-        print "Error : ", $res->error_message;
+The handler methods will receive the following parameters:
+
+    sub your_handler_method {
+        my ($self, $params, $procedure, @extra_args) = @_;
+
+        return $some_structure;
     }
-    else {
-        print $res->result;
+
+In most cases you will only need the parameters. The exact format of the $params is dependend on the caller -- you will be passed whatever JSON structure that caller used to call your handler.
+
+$procedure is an instance of JSON::RPC::Procedure. Use it if you need to figure out more about the procedure.
+
+@extra_args is optional, and will be filled with whatever extra arguments you passed to handle_psgi(). For example, 
+
+    # app.psgi
+    sub {
+        $dispatcher->handle_psgi($env, "arg1", "arg2", "arg3");
     }
- }
- else {
-    print $client->status_line;
- }
- 
- # or
- 
- $client->prepare($uri, ['sum', 'echo']);
- print $client->sum(10, 23);
- 
 
-See to L<JSON::RPC::Server::CGI>, L<JSON::RPC::Server::Daemon>, L<JSON::RPC::Server::Apache>
-L<JSON::RPC::Client> and L<JSON::RPC::Procedure>.
+will cause your handlers to receive the following arguments:
 
+    sub your_handler_method {
+        my ($self, $params, $procedure, $arg1, $arg2, $arg3) = @_;
 
-=head1 ABOUT NEW VERSION
+    }
 
-=over
+This is convenient if you have application-specific data that needs to be passed to your handlers.
 
-=item supports JSON-RPC protocol v1.1
+=head1 EMBED IT IN YOUR WEBAPP
 
+If you already have a web app (and whatever framework you might already have), you may choose to embed JSON::RPC in your webapp instead of directly calling it in your PSGI application.
 
-=back
+For example, if you would like to your webapp's "rpc" handler to marshall the JSON RPC request, you can do something like the following:
 
-=head1 TODO
+    package MyApp;
+    use My::Favorite::WebApp;
 
-=over
+    sub rpc {
+        my ($self, $context) = @_;
 
-=item Document
+        my $dispatcher =  ...; # grab it from somewhere
+        $dispatcher->handle_psgi( $context->env );
+    }
 
-=item Examples
+=head1 BACKWARDS COMPATIBILITY
 
-=item More Tests
+Eh, not compatible at all. JSON RPC 0.xx was fine, but it predates PSGI, and things are just... different before and after PSGI.
 
+Code at version 0.96 has been moved to JSON::RPC::Legacy namespace, so change your application to use JSON::RPC::Legacy if you were using the old version.
 
-=back
+=head1 AUTHORS
 
+Daisuke Maki
 
-=head1 AUTHOR
+Shinichiro Aska
 
-Makamaka Hannyaharamitu, E<lt>makamaka[at]cpan.orgE<gt>
+Yoshimitsu Torii
 
+=head1 AUTHOR EMERITUS
+
+Makamaka Hannyaharamitu, E<lt>makamaka[at]cpan.orgE<gt> - JSON::RPC modules up to 0.96
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2007-2008 by Makamaka Hannyaharamitu
+The JSON::RPC module is
+
+Copyright (C) 2011 by Daisuke Maki
 
 This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself. 
+it under the same terms as Perl itself, either Perl version 5.8.0 or,
+at your option, any later version of Perl 5 you may have available.
+
+See JSON::RPC::Legacy for copyrights and license for previous versions.
 
 =cut
-
-

@@ -13,19 +13,19 @@ use HTTP::Response ();
 
 ##############################################################################
 
-package JSON::RPC::Server;
+package JSON::RPC::Legacy::Server;
 
 my $JSONRPC_Procedure_Able;
 
 BEGIN {
     if ($] >= 5.006) {
-        require  JSON::RPC::Procedure;
+        require  JSON::RPC::Legacy::Procedure;
         $JSONRPC_Procedure_Able = 1;
     }
 }
 
 
-$JSON::RPC::Server::VERSION = '0.92';
+$JSON::RPC::Legacy::Server::VERSION = '0.92';
 
 
 BEGIN {
@@ -268,7 +268,7 @@ sub _find_procedure {
         if (my $pkg = $self->{dispatch_path}->{$path}) {
 
             return if ( $classname and $pkg ne $classname );
-            return if ( $JSONRPC_Procedure_Able and JSON::RPC::Procedure->can( $method ) );
+            return if ( $JSONRPC_Procedure_Able and JSON::RPC::Legacy::Procedure->can( $method ) );
 
             $self->_load_module($pkg);
 
@@ -281,7 +281,7 @@ sub _find_procedure {
         for my $pkg (@{$self->{loaded_module}->{order}}) {
 
             next if ( $classname and $pkg ne $classname );
-            next if ( $JSONRPC_Procedure_Able and JSON::RPC::Procedure->can( $method ) );
+            next if ( $JSONRPC_Procedure_Able and JSON::RPC::Legacy::Procedure->can( $method ) );
 
             if ($system_call) { $pkg .= '::system' }
 
@@ -313,7 +313,7 @@ sub _method_is_ebable {
     if ( $code or ( $code = $pkg->can($method) ) ) {
         return {code =>  $code} if ($system_call or !$JSONRPC_Procedure_Able);
 
-        if ( my $procedure = JSON::RPC::Procedure::check($pkg, $code) ) {
+        if ( my $procedure = JSON::RPC::Legacy::Procedure::check($pkg, $code) ) {
             return if ($procedure->{return_type} and $procedure->{return_type} eq 'Private');
             $procedure->{code} = $code;
             return $procedure;
@@ -321,7 +321,7 @@ sub _method_is_ebable {
     }
 
     if ($system_call) { # if not found, default system.foobar
-        if ( my $code = 'JSON::RPC::Server::system'->can($method) ) {
+        if ( my $code = 'JSON::RPC::Legacy::Server::system'->can($method) ) {
             return {code => $code};
         }
     }
@@ -442,7 +442,7 @@ sub _error {
 
 ##############################################################################
 
-package JSON::RPC::Server::system;
+package JSON::RPC::Legacy::Server::system;
 
 sub describe {
     {
@@ -467,9 +467,9 @@ JSON::RPC::Server - Perl implementation of JSON-RPC sever
 
 
  # CGI version
- use JSON::RPC::Server::CGI;
+ use JSON::RPC::Legacy::Server::CGI;
  
- my $server = JSON::RPC::Server::CGI->new;
+ my $server = JSON::RPC::Legacy::Server::CGI->new;
 
  $server->dispatch_to('MyApp')->handle();
  
@@ -483,7 +483,7 @@ JSON::RPC::Server - Perl implementation of JSON-RPC sever
  
  <Location /jsonrpc/API>
       SetHandler perl-script
-      PerlResponseHandler JSON::RPC::Server::Apache
+      PerlResponseHandler JSON::RPC::Legacy::Server::Apache
       PerlSetVar dispatch "MyApp"
       PerlSetVar return_die_message 0
  </Location>
@@ -491,18 +491,18 @@ JSON::RPC::Server - Perl implementation of JSON-RPC sever
  
  
  # Daemon version
- use JSON::RPC::Server::Daemon;
+ use JSON::RPC::Legacy::Server::Daemon;
  
- JSON::RPC::Server::Daemon->new(LocalPort => 8080);
+ JSON::RPC::Legacy::Server::Daemon->new(LocalPort => 8080);
                           ->dispatch({'/jsonrpc/API' => 'MyApp'})
                           ->handle();
  
  
  
  # FastCGI version
- use JSON::RPC::Server::FastCGI;
+ use JSON::RPC::Legacy::Server::FastCGI;
  
- my $server = JSON::RPC::Server::FastCGI->new;
+ my $server = JSON::RPC::Legacy::Server::FastCGI->new;
  
     $server->dispatch_to('MyApp')->handle();
 
@@ -529,7 +529,7 @@ Well, you write your procedure code only.
 
 =item new
 
-Creates new JSON::RPC::Server object.
+Creates new JSON::RPC::Legacy::Server object.
 
 
 =item dispatch($package)
@@ -616,18 +616,18 @@ If this option is set, uses C<die> message.
 
 =item retrieve_json_from_post
 
-It is used by JSON::RPC::Server subclass.
+It is used by JSON::RPC::Legacy::Server subclass.
 
 
 =item retrieve_json_from_get
 
 In the protocol v1.1, 'GET' request method is also allowable.
 
-It is used by JSON::RPC::Server subclass.
+It is used by JSON::RPC::Legacy::Server subclass.
 
 =item response
 
-It is used by JSON::RPC::Server subclass.
+It is used by JSON::RPC::Legacy::Server subclass.
 
 =item request
 
@@ -667,13 +667,13 @@ You can override it to use your favorite JSON de/encode.
 =head1 RESERVED PROCEDURE
 
 When a client call a procedure (method) name 'system.foobar',
-JSON::RPC::Server look up MyApp::system::foobar.
+JSON::RPC::Legacy::Server look up MyApp::system::foobar.
 
 L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html#ProcedureCall>
 
 L<http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html#ServiceDescription>
 
-There is JSON::RPC::Server::system::describe for default response of 'system.describe'.
+There is JSON::RPC::Legacy::Server::system::describe for default response of 'system.describe'.
 
 
 =head1 SEE ALSO

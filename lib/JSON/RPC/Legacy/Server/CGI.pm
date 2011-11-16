@@ -1,13 +1,13 @@
 ##############################################################################
-package JSON::RPC::Server::CGI;
+package JSON::RPC::Legacy::Server::CGI;
 
 use strict;
 use CGI;
-use JSON::RPC::Server; # for old Perl 5.005
+use JSON::RPC::Legacy::Server; # for old Perl 5.005
 
-use base qw(JSON::RPC::Server);
+use base qw(JSON::RPC::Legacy::Server);
 
-$JSON::RPC::Server::CGI::VERSION = '0.92';
+$JSON::RPC::Legacy::Server::CGI::VERSION = '0.92';
 
 sub new {
     my $class = shift;
@@ -71,16 +71,16 @@ __END__
 
 =head1 NAME
 
-JSON::RPC::Server::CGI - JSON-RPC sever for CGI
+JSON::RPC::Legacy::Server::CGI - JSON-RPC sever for CGI
 
 =head1 SYNOPSIS
 
  # CGI version
  #--------------------------
  # In your CGI script
- use JSON::RPC::Server::CGI;
+ use JSON::RPC::Legacy::Server::CGI;
  
- my $server = JSON::RPC::Server::CGI->new;
+ my $server = JSON::RPC::Legacy::Server::CGI->new;
 
  $server->dispatch('MyApp')->handle();
  
@@ -97,10 +97,10 @@ JSON::RPC::Server::CGI - JSON-RPC sever for CGI
  # In your application class
  package MyApp;
  
- use base qw(JSON::RPC::Procedure); # Perl 5.6 or more than
+ use base qw(JSON::RPC::Legacy::Procedure); # Perl 5.6 or more than
  
  sub echo : Public {    # new version style. called by clients
-     # first argument is JSON::RPC::Server object.
+     # first argument is JSON::RPC::Legacy::Server object.
      return $_[1];
  }
  
@@ -136,14 +136,14 @@ Well, you write your procedure code only.
 
 =head1 METHODS
 
-They are inherited from the L<JSON::RPC::Server> methods basically.
-The below methods are implemented in JSON::RPC::Server::CGI.
+They are inherited from the L<JSON::RPC::Legacy::Server> methods basically.
+The below methods are implemented in JSON::RPC::Legacy::Server::CGI.
 
 =over
 
 =item new
 
-Creates new JSON::RPC::Server::CGI object.
+Creates new JSON::RPC::Legacy::Server::CGI object.
 
 =item retrieve_json_from_post
 
@@ -166,9 +166,9 @@ returns the L<CGI> object.
 
 =head1 SEE ALSO
 
-L<JSON::RPC::Server>,
+L<JSON::RPC::Legacy::Server>,
 
-L<JSON::RPC::Procedure>,
+L<JSON::RPC::Legacy::Procedure>,
 
 L<JSON>,
 
