@@ -9,7 +9,7 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/JSON/RPC.pm
 lib/JSON/RPC/Constants.pm
-lib/JSON/RPC/Dispatcher.pm
+lib/JSON/RPC/Dispatch.pm
 lib/JSON/RPC/Legacy.pm
 lib/JSON/RPC/Legacy/Client.pm
 lib/JSON/RPC/Legacy/Procedure.pm
