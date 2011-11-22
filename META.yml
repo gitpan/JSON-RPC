@@ -34,4 +34,5 @@ requires:
   parent: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 1.00_02
+  repository: git://github.com/lestrrat/JSON-RPC.git
+version: 1.00
