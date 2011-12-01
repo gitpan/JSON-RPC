@@ -35,4 +35,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/lestrrat/JSON-RPC.git
-version: 1.00
+version: 1.01
