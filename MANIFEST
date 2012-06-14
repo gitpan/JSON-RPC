@@ -20,6 +20,7 @@ lib/JSON/RPC/Legacy/Server/CGI.pm
 lib/JSON/RPC/Legacy/Server/Daemon.pm
 lib/JSON/RPC/Parser.pm
 lib/JSON/RPC/Procedure.pm
+lib/JSON/RPC/Test.pm
 Makefile.PL
 MANIFEST			This list of files
 META.yml
