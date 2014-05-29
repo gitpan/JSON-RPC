@@ -1,16 +1,8 @@
-package JSON::RPC;
-use strict;
-our $VERSION = '1.04';
-
-1;
-
-__END__
-
-=head1 NAME
+# NAME
 
 JSON::RPC - JSON RPC 2.0 Server Implementation
 
-=head1 SYNOPSIS
+# SYNOPSIS
 
     # app.psgi
     use strict;
@@ -26,7 +18,7 @@ JSON::RPC - JSON RPC 2.0 Server Implementation
         $dispatch->handle_psgi($env);
     };
 
-=head1 DESCRIPTION
+# DESCRIPTION
 
 JSON::RPC is a set of modules that implement JSON RPC 2.0 protocol.
 
@@ -34,7 +26,7 @@ JSON::RPC is a set of modules that implement JSON RPC 2.0 protocol.
     YOUR CODE TO WORK WITH THIS VERSION. THIS VERSION IS 
     ****BACKWARDS INCOMPATIBLE****
 
-=head1 BASIC USAGE
+# BASIC USAGE
 
 The JSON::RPC::Dispatch object is responsible for marshalling the request.
 
@@ -43,7 +35,7 @@ The JSON::RPC::Dispatch object is responsible for marshalling the request.
     );
 
 The routing between the JSON RPC methods and their implementors are handled by
-Router::Simple. For example, if you want to map method "foo" to a "MyApp::JSONRPC::Handler" object instance's "handle_foo" method, you specify something like the following in your router instance:
+Router::Simple. For example, if you want to map method "foo" to a "MyApp::JSONRPC::Handler" object instance's "handle\_foo" method, you specify something like the following in your router instance:
 
     use Router::Simple::Declare;
     my $router = router {
@@ -87,7 +79,6 @@ The "+" prefix in the handler classname denotes that it is already a fully quali
     #    my $handler = MyApp::JSONRPC::Handler::Bar->new;
     #    $handler->process( ... );
 
-
 The implementors are called handlers. Handlers are simple objects, and will be instantiated automatically for you. Their return values are converted to JSON objects automatically.
 
 You may also choose to pass objects in the handler argument to connect in  your router. This will save you the cost of instantiating the handler object, and you also don't have to rely on us instantiating your handler object.
@@ -103,7 +94,7 @@ You may also choose to pass objects in the handler argument to connect in  your 
         };
     };
 
-=head1 HANDLERS
+# HANDLERS
 
 Your handlers are objects responsible for returning some sort of reference structure that can be properly encoded via JSON/JSON::XS. The handler only needs to implement the methods that you specified in your router.
 
@@ -119,7 +110,7 @@ In most cases you will only need the parameters. The exact format of the $params
 
 $procedure is an instance of JSON::RPC::Procedure. Use it if you need to figure out more about the procedure.
 
-@extra_args is optional, and will be filled with whatever extra arguments you passed to handle_psgi(). For example, 
+@extra\_args is optional, and will be filled with whatever extra arguments you passed to handle\_psgi(). For example, 
 
     # app.psgi
     sub {
@@ -135,7 +126,7 @@ will cause your handlers to receive the following arguments:
 
 This is convenient if you have application-specific data that needs to be passed to your handlers.
 
-=head1 EMBED IT IN YOUR WEBAPP
+# EMBED IT IN YOUR WEBAPP
 
 If you already have a web app (and whatever framework you might already have), you may choose to embed JSON::RPC in your webapp instead of directly calling it in your PSGI application.
 
@@ -151,9 +142,9 @@ For example, if you would like to your webapp's "rpc" handler to marshall the JS
         $dispatch->handle_psgi( $context->env );
     }
 
-=head1 ERRORS
+# ERRORS
 
-When your handler dies, it is automatically included in the response hash, unless no response was requested (see L</NOTIFICATIONS>).
+When your handler dies, it is automatically included in the response hash, unless no response was requested (see ["NOTIFICATIONS"](#notifications)).
 
 For example, something like below 
 
@@ -192,7 +183,7 @@ This would result in:
         }
     }
 
-=head1 NOTIFICATIONS
+# NOTIFICATIONS
 
 Notifications are defined as procedures without an id.
 Notification handling does not produce a response. When all procedures are notifications no content is returned (if the request is valid).
@@ -216,13 +207,13 @@ Would result in a response like
         {"jsonrpc": "2.0", "result": ["hello", 5], "id": "9"}
     ]
 
-=head1 BACKWARDS COMPATIBILITY
+# BACKWARDS COMPATIBILITY
 
 Eh, not compatible at all. JSON RPC 0.xx was fine, but it predates PSGI, and things are just... different before and after PSGI.
 
 Code at version 0.96 has been moved to JSON::RPC::Legacy namespace, so change your application to use JSON::RPC::Legacy if you were using the old version.
 
-=head1 AUTHORS
+# AUTHORS
 
 Daisuke Maki
 
@@ -230,11 +221,11 @@ Shinichiro Aska
 
 Yoshimitsu Torii
 
-=head1 AUTHOR EMERITUS
+# AUTHOR EMERITUS
 
-Makamaka Hannyaharamitu, E<lt>makamaka[at]cpan.orgE<gt> - JSON::RPC modules up to 0.96
+Makamaka Hannyaharamitu, <makamaka\[at\]cpan.org> - JSON::RPC modules up to 0.96
 
-=head1 COPYRIGHT AND LICENSE
+# COPYRIGHT AND LICENSE
 
 The JSON::RPC module is
 
@@ -245,5 +236,3 @@ it under the same terms as Perl itself, either Perl version 5.8.0 or,
 at your option, any later version of Perl 5 you may have available.
 
 See JSON::RPC::Legacy for copyrights and license for previous versions.
-
-=cut

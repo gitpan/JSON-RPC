@@ -11,7 +11,7 @@ use Carp ();
 
 package JSON::RPC::Legacy::Client;
 
-$JSON::RPC::Legacy::Client::VERSION = '0.93';
+$JSON::RPC::Legacy::Client::VERSION = '1.04';
 
 use LWP::UserAgent;
 
@@ -107,19 +107,13 @@ sub call {
 
     $self->status_line($result->status_line);
 
-    if ($result->is_success) {
+    return unless($result->content); # notification?
 
-        return unless($result->content); # notification?
-
-        if ($service) {
-            return JSON::RPC::Legacy::ServiceObject->new($result, $self->json);
-        }
-
-        return JSON::RPC::Legacy::ReturnObject->new($result, $self->json);
+    if ($service) {
+        return JSON::RPC::Legacy::ServiceObject->new($result, $self->json);
     }
-    else {
-        return;
-    }
+
+    return JSON::RPC::Legacy::ReturnObject->new($result, $self->json);
 }
 
 
@@ -341,7 +335,7 @@ Sets the JSON-RPC protocol version.
 =item id
 
 Sets a request identifier.
-In JSON-RPC 1.1, it is optoinal.
+In JSON-RPC 1.1, it is optional.
 
 If you set C<version> 1.0 and don't set id,
 the module sets 'JSON::RPC::Legacy::Client' to it.
