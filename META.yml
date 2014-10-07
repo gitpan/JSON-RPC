@@ -12,7 +12,7 @@ configure_requires:
   CPAN::Meta::Prereqs: '0'
   Module::Build: '0.38'
 dynamic_config: 0
-generated_by: 'Minilla/v0.12.0, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Minilla/v1.1.0, CPAN::Meta::Converter version 2.141520'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -31,55 +31,46 @@ no_index:
 provides:
   JSON::RPC:
     file: lib/JSON/RPC.pm
-    version: '1.04'
+    version: '1.05'
   JSON::RPC::Constants:
     file: lib/JSON/RPC/Constants.pm
-    version: 0
   JSON::RPC::Dispatch:
     file: lib/JSON/RPC/Dispatch.pm
-    version: 0
   JSON::RPC::Legacy:
     file: lib/JSON/RPC/Legacy.pm
-    version: 0
   JSON::RPC::Legacy::Client:
     file: lib/JSON/RPC/Legacy/Client.pm
-    version: '1.04'
+    version: '1.05'
   JSON::RPC::Legacy::Procedure:
     file: lib/JSON/RPC/Legacy/Procedure.pm
-    version: '1.04'
+    version: '1.05'
   JSON::RPC::Legacy::ReturnObject:
     file: lib/JSON/RPC/Legacy/Client.pm
     version: '0'
   JSON::RPC::Legacy::Server:
     file: lib/JSON/RPC/Legacy/Server.pm
-    version: '1.04'
+    version: '1.05'
   JSON::RPC::Legacy::Server::Apache:
     file: lib/JSON/RPC/Legacy/Server/Apache2.pm
-    version: '1.04'
+    version: '1.05'
   JSON::RPC::Legacy::Server::Apache2:
     file: lib/JSON/RPC/Legacy/Server/Apache2.pm
-    version: 0
   JSON::RPC::Legacy::Server::CGI:
     file: lib/JSON/RPC/Legacy/Server/CGI.pm
-    version: '1.04'
+    version: '1.05'
   JSON::RPC::Legacy::Server::Daemon:
     file: lib/JSON/RPC/Legacy/Server/Daemon.pm
-    version: '1.04'
+    version: '1.05'
   JSON::RPC::Legacy::Server::system:
     file: lib/JSON/RPC/Legacy/Server.pm
-    version: 0
   JSON::RPC::Legacy::ServiceObject:
     file: lib/JSON/RPC/Legacy/Client.pm
-    version: 0
   JSON::RPC::Parser:
     file: lib/JSON/RPC/Parser.pm
-    version: 0
   JSON::RPC::Procedure:
     file: lib/JSON/RPC/Procedure.pm
-    version: 0
   JSON::RPC::Test:
     file: lib/JSON/RPC/Test.pm
-    version: 0
 recommends:
   JSON::XS: '0'
 requires:
@@ -93,10 +84,10 @@ requires:
   Router::Simple: '0'
   parent: '0'
 resources:
-  bugtracker: https://github.com/lestrrat/JSON-RPC/issues
-  homepage: https://github.com/lestrrat/JSON-RPC
-  repository: git://github.com/lestrrat/JSON-RPC.git
-version: '1.04'
+  bugtracker: ssh://git@github.com/lestrrat/JSON-RPC/issues
+  homepage: ssh://git@github.com/lestrrat/JSON-RPC
+  repository: ssh://git@github.com/lestrrat/JSON-RPC.git
+version: '1.05'
 x_contributors:
   - 'Yoshimitsu Torii <yoshimitsu.torii@gmail.com>'
   - 'Stanislav Lechev [AngelFire] <af@0xAF.org>'
@@ -104,4 +95,4 @@ x_contributors:
   - 'David Steinbrunner <dsteinbrunner@pobox.com>'
   - 'ThePeePs <patrick@thepeeps.net>'
   - 'Kirill Bogdanov <Sco76@hackerdom.ru>'
-  - 'lestrrat <lestrrat+github@gmail.com>'
+  - 'Daisuke Maki <lestrrat+github@gmail.com>'

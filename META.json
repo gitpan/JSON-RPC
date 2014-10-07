@@ -4,7 +4,7 @@
       "Daisuke Maki"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.12.0",
+   "generated_by" : "Minilla/v1.1.0",
    "license" : [
       "perl_5"
    ],
@@ -44,7 +44,8 @@
       "develop" : {
          "requires" : {
             "Test::CPAN::Meta" : "0",
-            "Test::MinimumVersion" : "0.10108",
+            "Test::MinimumVersion::Fast" : "0.04",
+            "Test::PAUSE::Permissions" : "0.04",
             "Test::Pod" : "1.41",
             "Test::Spellunker" : "v0.2.7"
          }
@@ -69,7 +70,7 @@
    "provides" : {
       "JSON::RPC" : {
          "file" : "lib/JSON/RPC.pm",
-         "version" : "1.04"
+         "version" : "1.05"
       },
       "JSON::RPC::Constants" : {
          "file" : "lib/JSON/RPC/Constants.pm"
@@ -82,11 +83,11 @@
       },
       "JSON::RPC::Legacy::Client" : {
          "file" : "lib/JSON/RPC/Legacy/Client.pm",
-         "version" : "1.04"
+         "version" : "1.05"
       },
       "JSON::RPC::Legacy::Procedure" : {
          "file" : "lib/JSON/RPC/Legacy/Procedure.pm",
-         "version" : "1.04"
+         "version" : "1.05"
       },
       "JSON::RPC::Legacy::ReturnObject" : {
          "file" : "lib/JSON/RPC/Legacy/Client.pm",
@@ -94,22 +95,22 @@
       },
       "JSON::RPC::Legacy::Server" : {
          "file" : "lib/JSON/RPC/Legacy/Server.pm",
-         "version" : "1.04"
+         "version" : "1.05"
       },
       "JSON::RPC::Legacy::Server::Apache" : {
          "file" : "lib/JSON/RPC/Legacy/Server/Apache2.pm",
-         "version" : "1.04"
+         "version" : "1.05"
       },
       "JSON::RPC::Legacy::Server::Apache2" : {
          "file" : "lib/JSON/RPC/Legacy/Server/Apache2.pm"
       },
       "JSON::RPC::Legacy::Server::CGI" : {
          "file" : "lib/JSON/RPC/Legacy/Server/CGI.pm",
-         "version" : "1.04"
+         "version" : "1.05"
       },
       "JSON::RPC::Legacy::Server::Daemon" : {
          "file" : "lib/JSON/RPC/Legacy/Server/Daemon.pm",
-         "version" : "1.04"
+         "version" : "1.05"
       },
       "JSON::RPC::Legacy::Server::system" : {
          "file" : "lib/JSON/RPC/Legacy/Server.pm"
@@ -130,15 +131,15 @@
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/lestrrat/JSON-RPC/issues"
+         "web" : "ssh://git@github.com/lestrrat/JSON-RPC/issues"
       },
-      "homepage" : "https://github.com/lestrrat/JSON-RPC",
+      "homepage" : "ssh://git@github.com/lestrrat/JSON-RPC",
       "repository" : {
-         "url" : "git://github.com/lestrrat/JSON-RPC.git",
-         "web" : "https://github.com/lestrrat/JSON-RPC"
+         "url" : "ssh://git@github.com/lestrrat/JSON-RPC.git",
+         "web" : "ssh://git@github.com/lestrrat/JSON-RPC"
       }
    },
-   "version" : "1.04",
+   "version" : "1.05",
    "x_contributors" : [
       "Yoshimitsu Torii <yoshimitsu.torii@gmail.com>",
       "Stanislav Lechev [AngelFire] <af@0xAF.org>",
@@ -146,6 +147,6 @@
       "David Steinbrunner <dsteinbrunner@pobox.com>",
       "ThePeePs <patrick@thepeeps.net>",
       "Kirill Bogdanov <Sco76@hackerdom.ru>",
-      "lestrrat <lestrrat+github@gmail.com>"
+      "Daisuke Maki <lestrrat+github@gmail.com>"
    ]
 }
