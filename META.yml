@@ -31,7 +31,7 @@ no_index:
 provides:
   JSON::RPC:
     file: lib/JSON/RPC.pm
-    version: '1.05'
+    version: '1.06'
   JSON::RPC::Constants:
     file: lib/JSON/RPC/Constants.pm
   JSON::RPC::Dispatch:
@@ -40,27 +40,27 @@ provides:
     file: lib/JSON/RPC/Legacy.pm
   JSON::RPC::Legacy::Client:
     file: lib/JSON/RPC/Legacy/Client.pm
-    version: '1.05'
+    version: '1.06'
   JSON::RPC::Legacy::Procedure:
     file: lib/JSON/RPC/Legacy/Procedure.pm
-    version: '1.05'
+    version: '1.06'
   JSON::RPC::Legacy::ReturnObject:
     file: lib/JSON/RPC/Legacy/Client.pm
     version: '0'
   JSON::RPC::Legacy::Server:
     file: lib/JSON/RPC/Legacy/Server.pm
-    version: '1.05'
+    version: '1.06'
   JSON::RPC::Legacy::Server::Apache:
     file: lib/JSON/RPC/Legacy/Server/Apache2.pm
-    version: '1.05'
+    version: '1.06'
   JSON::RPC::Legacy::Server::Apache2:
     file: lib/JSON/RPC/Legacy/Server/Apache2.pm
   JSON::RPC::Legacy::Server::CGI:
     file: lib/JSON/RPC/Legacy/Server/CGI.pm
-    version: '1.05'
+    version: '1.06'
   JSON::RPC::Legacy::Server::Daemon:
     file: lib/JSON/RPC/Legacy/Server/Daemon.pm
-    version: '1.05'
+    version: '1.06'
   JSON::RPC::Legacy::Server::system:
     file: lib/JSON/RPC/Legacy/Server.pm
   JSON::RPC::Legacy::ServiceObject:
@@ -87,7 +87,7 @@ resources:
   bugtracker: ssh://git@github.com/lestrrat/JSON-RPC/issues
   homepage: ssh://git@github.com/lestrrat/JSON-RPC
   repository: ssh://git@github.com/lestrrat/JSON-RPC.git
-version: '1.05'
+version: '1.06'
 x_contributors:
   - 'Yoshimitsu Torii <yoshimitsu.torii@gmail.com>'
   - 'Stanislav Lechev [AngelFire] <af@0xAF.org>'
@@ -95,4 +95,5 @@ x_contributors:
   - 'David Steinbrunner <dsteinbrunner@pobox.com>'
   - 'ThePeePs <patrick@thepeeps.net>'
   - 'Kirill Bogdanov <Sco76@hackerdom.ru>'
+  - 'ar_tama <makoto.arata@dena.com>'
   - 'Daisuke Maki <lestrrat+github@gmail.com>'
